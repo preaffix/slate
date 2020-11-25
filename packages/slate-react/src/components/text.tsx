@@ -68,8 +68,26 @@ const MemoizedText = React.memo(Text, (prev, next) => {
     next.parent === prev.parent &&
     next.isLast === prev.isLast &&
     next.renderLeaf === prev.renderLeaf &&
-    next.text === prev.text
+    next.text === prev.text &&
+    isRangeListEqual(prev.decorations, next.decorations)
   )
 })
+
+const isRangeListEqual = (list: Range[], another: Range[]): boolean => {
+  if (list.length !== another.length) {
+    return false
+  }
+
+  for (let i = 0; i < list.length; i++) {
+    const range = list[i]
+    const other = another[i]
+
+    if (!Range.equals(range, other)) {
+      return false
+    }
+  }
+
+  return true
+}
 
 export default MemoizedText
